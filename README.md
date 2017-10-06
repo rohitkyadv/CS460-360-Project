@@ -21,5 +21,10 @@ https://html-online.com/editor/
 Natural language tookkit
 http://www.nltk.org/
 
+Other NLP's
+https://opensource.com/business/15/7/five-open-source-nlp-tools
+https://stanfordnlp.github.io/CoreNLP/
+
+
 Other voice recognition alternatives
 https://stackoverflow.com/a/6351055
