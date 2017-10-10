@@ -12,7 +12,7 @@
 
 <!-- Search Form -->
 <form id="labnol" method="post" action="welcome.php"> <!action="https://www.google.com/search">
-  Sentance: <div class="speech">
+  Sentence: <div class="speech">
     <input type="text" name="raw" id="transcript" placeholder="Speak" />
     <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />
   </div>
