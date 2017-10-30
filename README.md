@@ -28,3 +28,7 @@ https://stanfordnlp.github.io/CoreNLP/
 
 Other voice recognition alternatives
 https://stackoverflow.com/a/6351055
+
+Server setup
+General stack: https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-debian-8
+php7: https://www.rosehosting.com/blog/install-php-7-1-with-nginx-on-an-ubuntu-16-04-vps/
