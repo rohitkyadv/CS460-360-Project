@@ -4,6 +4,11 @@ from datetime import datetime       # for date printing
 import nltk                         # natural language tookkit
 
 print ("Time is: ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+# print current time to file to prove we ran
+file = open("log.log", "a")
+file.write("Time is: %s - %s\n" % (datetime.now(),  argv[1]))
+file.close()
+
  # we use <br> for new lines since this is generating html content for php
 print ("<br>")
 
