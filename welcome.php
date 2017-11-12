@@ -2,6 +2,9 @@
 <h1 style="color: #5e9ca0;">Uidaho Database Systems Project</h1>
 <p>CS 360 Fall 2017</p>
 <body>
+  
+<!-- HTML5 Speech Recognition API -->
+<script src="script_VoiceRecgnition.js"></script>
 
 <!-- CSS Styles -->
 <style>
@@ -32,35 +35,6 @@ $output = shell_exec($command . $arg);
 echo $output;
 ?>
 
-
-<!-- HTML5 Speech Recognition API -->
-<script>
-  function startDictation() {
-
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-
-      var recognition = new webkitSpeechRecognition();
-
-      recognition.continuous = false;
-      recognition.interimResults = false;
-
-      recognition.lang = "en-US";
-      recognition.start();
-
-      recognition.onresult = function(e) {
-        document.getElementById('transcript').value
-                                 = e.results[0][0].transcript;
-        recognition.stop();
-        document.getElementById('labnol').submit();
-      };
-
-      recognition.onerror = function(e) {
-        recognition.stop();
-      }
-
-    }
-  }
-</script>
 
 </body>
 </html> 
