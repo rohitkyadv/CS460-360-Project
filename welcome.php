@@ -32,7 +32,7 @@ Output: <br>
 $command = escapeshellcmd('/home/ubuntu/workspace/main.py');
 $arg     = " " . "\"" . $_POST["raw"] . "\"";
 $output = shell_exec($command . $arg);
-echo $output;
+echo nl2br($output);    // nl2br converts newlines to html <br>
 ?>
 
 
