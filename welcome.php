@@ -26,7 +26,7 @@ Input: <?php echo $_POST["raw"]; ?><br>
 Output: <br>
 <?php 
 
-$command = escapeshellcmd('/home/ubuntu/workspace/main.py');
+$command = escapeshellcmd('/home/ubuntu/Database_Systems_Project/main.py');
 $arg     = " " . "\"" . $_POST["raw"] . "\"";
 $output = shell_exec($command . $arg);
 echo $output;
