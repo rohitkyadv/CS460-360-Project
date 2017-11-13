@@ -10,7 +10,6 @@ sudo add-apt-repository -y ppa:ondrej/php
 sudo apt-get update -qq
 sudo apt install -y php7.1 php7.1-fpm php7.1-mysql
 
-exit
 echo "Installing python and dependancies"
 sudo apt install -y python3 python3-pip
 pip3 install --upgrade nltk numpy pymysql
