@@ -43,10 +43,16 @@ def db_run_querey(db, query):
         return 1
     else:
         cur = conn.cursor()
-        cur.execute(query)
-        for response in cur:
-            #print("Response: %r\tType: %r" % (response, type(response)))   # response is a tuple
-            print(response)
+        try:
+            cur.execute(query)
+        except Exception as e:
+            print("An error occured when executing query")
+            print("\tThe query: %r " % query)
+            print (e)
+        else:
+            for response in cur:
+                #print("Response: %r\tType: %r" % (response, type(response)))   # response is a tuple
+                print(response)
         cur.close()
         conn.close()
         
@@ -54,3 +60,30 @@ db = "phpteset"
 db_run_querey(db, "show tables")
 print ("....")
 db_run_querey(db, "select * from MarketingStatus")
+print("...")
+
+#db_run_querey(db, "USE DBName GO SELECT * FROM sys.Tables GO")
+db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='phpteset';")
+print ("------")
+db_run_querey(db, "SELECT column_name FROM information_schema.tables where table_schema='phpteset';")
+
+db="information_schema"
+query= "SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'phpteset' and table_name = 'MarketingStatus'"
+print ("\n" +query)
+db_run_querey(db,query)
+
+
+db_schema = { 
+            "Table1" :
+              {
+                  "Movies": ["Movies", "Films", "Film"],
+                  "c2": ["c2", "a1", "a2"],
+                  "c3": ["c3"],
+                  "c4": ["c4"]
+              },
+            "Table2" : ["c1", "a1", "a2"]
+            }
+
+
+print ("\n\n")
+print (db_schema)
