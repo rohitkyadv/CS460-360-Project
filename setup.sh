@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# get root permission
+if [ $EUID != 0 ]; then
+    sudo "$0" "$@"
+    exit $?
+fi
+
 f_install_server() {
     echo "Installing webserver and other binaries"
     sudo apt update -qq
