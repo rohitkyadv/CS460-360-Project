@@ -23,6 +23,7 @@ git clone https://github.com/Cyberzoid1/Database_Systems_Project.git
 Now run the setup script
 ```
 cd Database_Systems_Project
+chmod +x setup.sh
 sudo ./setup.sh
 ```
 
