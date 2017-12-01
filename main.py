@@ -30,8 +30,6 @@ tagged = nltk.pos_tag(tokens)
 print ("Tagged words: %r\n" % tagged[0:6])
 
 
-
-
 def db_run_querey(db, query):
     # https://stackoverflow.com/a/13846183
     config = {
@@ -53,28 +51,30 @@ def db_run_querey(db, query):
             print("An error occured when executing query")
             print("\tThe query: %r " % query)
             print (e)
+            return 1
         else:
+            rtn_list = []
+            #print (cur.fetchall())
             for response in cur:
                 #print("Response: %r\tType: %r" % (response, type(response)))   # response is a tuple
                 print(response)
+                rtn_list.append(response[0])
+            #print ("rtn_list: %r" % rtn_list)
         cur.close()
         conn.close()
+    return rtn_list
         
 db = "drugsdatabase"
-db_run_querey(db, "show tables")
-print ("....")
-db_run_querey(db, "select * from MarketingStatus")
-print("...")
-
-#db_run_querey(db, "USE DBName GO SELECT * FROM sys.Tables GO")
-db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='phpteset';")
+tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='drugsdatabase';")
+for i in tables:
+    print (i)
+    db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + i + "'")
 print ("------")
-db_run_querey(db, "SELECT column_name FROM information_schema.tables where table_schema='phpteset';")
 
-db="information_schema"
-query= "SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'phpteset' and table_name = 'MarketingStatus'"
-print ("\n" +query)
-db_run_querey(db,query)
+
+# SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.tables where table_schema='drugsdatabase';
+# SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase' and table_name = 'marketingstatus'
+# SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase'
 
 
 db_schema = { 
