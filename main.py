@@ -31,9 +31,9 @@ print ("Tagged words: %r\n" % tagged[0:6])
 def db_run_querey(db, query):
     # https://stackoverflow.com/a/13846183
     config = {
-      'user': 'root',
-      'passwd': None,
-      'host': '127.0.0.1',
+      'user': 'nick',
+      'passwd': 'harvey',
+      'host': 'database.nkren.net',
       'db': db,
     }
     try:
@@ -56,7 +56,7 @@ def db_run_querey(db, query):
         cur.close()
         conn.close()
         
-db = "phpteset"
+db = "drugsdatabase"
 db_run_querey(db, "show tables")
 print ("....")
 db_run_querey(db, "select * from MarketingStatus")
