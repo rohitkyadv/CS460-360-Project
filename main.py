@@ -5,6 +5,10 @@ import nltk                         # natural language tookkit
 import pymysql
 
 print ("Time is: ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+if len(argv) < 2:
+    print("Missing arguments")
+    exit()
+
 # print current time to file to prove we ran
 file = open("log.log", "a")
 file.write("Time is: %s - %s\n" % (datetime.now(),  argv[1]))
