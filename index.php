@@ -28,7 +28,7 @@ if ($data != null) {
   echo "Input: " . data . "<br>";
   echo "Output: <br>";
   
-  $command = escapeshellcmd('/home/ubuntu/workspace/main.py');
+  $command = escapeshellcmd(getcwd() . '/main.py');
   $arg     = " " . "\"" . $_POST["raw"] . "\"";
   $output = shell_exec($command . $arg);
   echo nl2br($output);    // nl2br converts newlines to html <br>
