@@ -39,7 +39,9 @@ f_install_pythonApp() {
     pip3 install --upgrade nltk numpy pymysql
     
     echo "Configuring python nltk"
-    python3 -m nltk.downloader all
+    #python3 -m nltk.downloader all
+    python3 -m nltk.downloader punkt
+    python3 -m nltk.downloader averaged_perceptron_tagger
 }
 
 
