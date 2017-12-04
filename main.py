@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-import matplotlib
-# Force matplotlib to not use any Xwindows backend.
-matplotlib.use('Agg')
 
 
 from sys import argv                # for arguments
