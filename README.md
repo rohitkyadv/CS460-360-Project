@@ -1,14 +1,36 @@
 # Database_Systems_Project
 This is the course project for Uidaho cs 360
 
-http://www.nltk.org/install.html
-* Install NLTK: run `sudo pip install -U nltk`
-* Install Numpy (optional): `run sudo pip install -U numpy`
-* Test installation: run python then type `import nltk`
+# Install Instructions
+Run the following commands
 
-http://www.nltk.org/data.html
-* To download all data `python -c "import nltk; nltk.download(all)"`
-* To download only parts `python` then `import nltk` then `nltk.download()`
+Make sure your system is up to date
+```
+sudo apt update
+sudo apt upgrade
+```
+
+Next make sure git is installed
+```
+sudo apt install git
+```
+
+Next clone this repository to your current directory
+```
+git clone https://github.com/Cyberzoid1/Database_Systems_Project.git
+```
+
+Now run the setup script
+```
+cd Database_Systems_Project
+chmod +x setup.sh
+sudo ./setup.sh
+```
+
+You can run the core python program like this
+```
+./main.py "sentence"
+```
 
 
 # References & tools
