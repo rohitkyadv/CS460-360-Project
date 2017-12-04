@@ -30,6 +30,9 @@ tagged = nltk.pos_tag(tokens)
 print ("Tagged words: %r\n" % tagged[0:6])
 
 
+
+
+# this runs a database querey and returns a list of what was returned.
 def db_run_querey(db, query):
     # https://stackoverflow.com/a/13846183
     config = {
@@ -63,39 +66,10 @@ def db_run_querey(db, query):
         cur.close()
         conn.close()
     return rtn_list
-    
-
-# SQL reference queries
-# SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.tables where table_schema='drugsdatabase';
-# SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase' and table_name = 'marketingstatus'
-# SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase'
-
-# SELECT
-# FROM
-# WHERE
-sql_output = {}
-sql_output['SELECT'] = ""
-sql_output['FROM']   = ""
-sql_output['WHERE']  = ""
-        
-#db = "drugsdatabase"
-db = "world"
-tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
-print ("--------------------")
-
-db_schema2 = {}
-for t in tables:
-    db_schema2[t] = {}  # create dictionary of attributes
-    #print (i)
-    attributes = db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + t + "'")
-    for a in attributes:
-        db_schema2[t][a] = a
-print ("------")
-#print("Post table grab: %s" % db_schema2)       # debugger
 
 
-# depending on how the disctionary is sorted this may return different results
-# stops on first hit. Problem if multiple tables use the same attribute
+# this function takes a keyword and finds that keyword in the database schema.
+# if a hit is found, this function returns a list of tuples for each match [(table, column), (table, column)]
 def find_attribute(keyword, schema):
     # is keyword a table?
     if keyword in schema:
@@ -118,6 +92,39 @@ def find_attribute(keyword, schema):
     #print(rtn_list)
     return rtn_list
 
+# SQL reference queries
+# SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.tables where table_schema='drugsdatabase';
+# SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase' and table_name = 'marketingstatus'
+# SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase'
+
+# SELECT
+# FROM
+# WHERE
+sql_output = {}
+sql_output['SELECT'] = ""
+sql_output['FROM']   = ""
+sql_output['WHERE']  = ""
+
+
+# build a schema of the database
+#db = "drugsdatabase"
+db = "world"
+tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
+print ("--------------------")
+
+db_schema2 = {}
+for t in tables:
+    db_schema2[t] = {}  # create dictionary of attributes
+    #print (i)
+    attributes = db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + t + "'")
+    for a in attributes:
+        db_schema2[t][a] = a
+print ("------")
+#print("Post table grab: %s" % db_schema2)       # debugger
+
+
+
+# Examples of finding keywords in our database
 g = find_attribute("Capital", db_schema2)
 print (g)
 
