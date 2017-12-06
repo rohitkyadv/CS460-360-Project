@@ -32,16 +32,18 @@ f_install_server() {
     ufw status
 }
 
+
 f_install_pythonApp() {
     echo "Installing python and dependancies"
     sudo apt update -qq
-    sudo apt install -y python3 python3-pip
+    sudo apt install -y python3 python3-pip python3-tk
     pip3 install --upgrade nltk numpy pymysql
     
     echo "Configuring python nltk"
     #python3 -m nltk.downloader all
     python3 -m nltk.downloader punkt
     python3 -m nltk.downloader averaged_perceptron_tagger
+    python3 -m nltk.downloader treebank
 }
 
 

@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+
+
 from sys import argv                # for arguments
 from datetime import datetime       # for date printing
 import nltk                         # natural language tookkit
@@ -10,6 +12,12 @@ if len(argv) < 2:
     exit()
 
 # print current time to file to prove we ran
+
+# Test if argv[1] is not null
+if len(argv) < 2:
+    print("A sentence must be included")
+    exit()
+
 file = open("log.log", "a")
 file.write("Time is: %s - %s\n" % (datetime.now(),  argv[1]))
 file.close()
@@ -27,11 +35,80 @@ print ("\nTokens %r\n" % tokens)
 
 # identifies each token to a part of speech
 tagged = nltk.pos_tag(tokens)
-print ("Tagged words: %r\n" % tagged[0:6])
+
+
+print ("Tagged words: %r\n" % tagged)
+
+from nltk.corpus import treebank
+from nltk import Tree
+
+dp1 = Tree('dp', [Tree('d', ['the']), Tree('np', ['dog'])])
+dp2 = Tree('dp', [Tree('d', ['the']), Tree('np', ['cat'])])
+vp = Tree('vp', [Tree('v', ['chased']), dp2])
+tree = Tree('s', [dp1, vp])
+print(tree)
+
+print(tree.pformat_latex_qtree())
+tree.pretty_print()
+
+
+sent = ['I', 'shot', 'an', 'elephant', 'in', 'my', 'pajamas']
+# http://www.nltk.org/book/ch08.html
+groucho_grammar = nltk.CFG.fromstring("""
+    S -> NP VP
+    PP -> P NP
+    NP -> Det N | Det N PP | 'I'
+    VP -> V NP | VP PP
+    Det -> 'an' | 'my'
+    N -> 'elephant' | 'pajamas'
+    V -> 'shot'
+    P -> 'in'
+    """)
+parser = nltk.ChartParser(groucho_grammar)
+for tree in parser.parse(sent):
+    print(tree)
+    tree.pretty_print()
 
 
 
+# Attempt to loop through a part of speech and create a grammer for our database schema
+pos_nn = ''
+first = True
+for i in tagged:
+    if (i[1] == 'NN'):
+        print (i)
+        if first:
+            pos_nn = i[0]
+            first = False
+        else:
+            pos_nn += ' | ' + i[0]
+print(pos_nn)
 
+pos_v = ''
+for i in tagged:
+    if (i[1] == 'V'):
+        print (i)
+        if first:
+            pos_v = i[0]
+            first = False
+        else:
+            pos_v += ' | ' + i[0]
+print(pos_v)
+
+my_groucho_grammar = nltk.CFG.fromstring("""
+    S -> NP VP
+    PP -> P NP
+    NP -> Det N | Det N PP | 'I'
+    VP -> V NP | VP PP
+    Det -> 'an' | 'my'
+    N -> 'elephant' | 'pajamas'
+    V -> 'shot'
+    P -> 'in'
+    """)
+
+
+
+exit()
 # this runs a database querey and returns a list of what was returned.
 def db_run_querey(db, query):
     # https://stackoverflow.com/a/13846183
