@@ -38,6 +38,7 @@ f_install_pythonApp() {
     sudo apt update -qq
     sudo apt install -y python3 python3-pip python3-tk
     pip3 install --upgrade nltk numpy pymysql
+    pip3 install git+https://github.com/emilmont/pyStatParser.git
     
     echo "Configuring python nltk"
     #python3 -m nltk.downloader all
