@@ -31,7 +31,7 @@ if ($data != null) {
   $command = escapeshellcmd(getcwd() . '/main.py');
   $arg     = " " . "\"" . $_POST["raw"] . "\"";
   $output = shell_exec($command . $arg);
-  echo nl2br($output);    // nl2br converts newlines to html <br>
+  echo "<pre>" . $output . "<pre>";    // nl2br converts newlines to html <br>
 }
 ?>
 

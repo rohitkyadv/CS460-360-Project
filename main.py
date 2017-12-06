@@ -8,7 +8,7 @@ from nltk import Tree
 import pymysql
 
 # print current time to file to prove we ran
-print ("Time is: ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+print (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 #print "\nArg1: ", argv[1:]  # Will print out all arguments starting at 1
 if len(argv) < 2:
     print("A sentence must be included")
@@ -40,8 +40,6 @@ tree = parser.parse(sentence)
 print (tree)
 print(tree.pformat_latex_qtree())
 tree.pretty_print()
-print (type(tree))
-
 
 
 exit()
