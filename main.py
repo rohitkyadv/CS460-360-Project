@@ -6,6 +6,7 @@ from stat_parser import Parser, display_tree    # https://stackoverflow.com/a/17
 from nltk.corpus import treebank
 from nltk import Tree
 import pymysql
+from lib_alias import alias_lookup
 
 # print current time to file to prove we ran
 print (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -42,7 +43,6 @@ print(tree.pformat_latex_qtree())
 tree.pretty_print()
 
 
-exit()
 # this runs a database querey and returns a list of what was returned.
 def db_run_querey(db, query):
     # https://stackoverflow.com/a/13846183
@@ -82,6 +82,7 @@ def db_run_querey(db, query):
 # this function takes a keyword and finds that keyword in the database schema.
 # if a hit is found, this function returns a list of tuples for each match [(table, column), (table, column)]
 def find_attribute(keyword, schema):
+    keyword = keyword.lower()
     # is keyword a table?
     if keyword in schema:
         print("%s is a table name" % keyword)
@@ -89,14 +90,14 @@ def find_attribute(keyword, schema):
     # is keyword a attribute of a table
     match_found = False
     rtn_list = []
-    for t in schema:    # loop through tables
-        #print ("table: %s" % t)                                             # debugger
-        for a in schema[t]:     # search attributes in table
-            #print ("attribute: %s" % a)                                     # debugger
-            if keyword == a:
-                print("Found match for %s in table %s" % (keyword, t))      # debugger
+    for t in schema:                            # loop through tables
+        #print ("table: %s" % t)                # debugger
+        for a in schema[t]:                     # search attributes in table
+            #print ("  attribute: %s" % a)      # debugger
+            if keyword in schema[t][a]:         # test if keyword exits in the list of aliases for a given attribute
+                #print("Found match for %s in table %s, column: %s" % (keyword, t, a))      # debugger
                 match_found = True
-                rtn_list.append((t,a))
+                rtn_list.append((t,a))          # add result tuple to return list
     if not match_found:
         print ("No match found for %s" % keyword)
         return 0
@@ -123,27 +124,30 @@ db = "world"
 tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
 print ("--------------------")
 
-db_schema2 = {}
+db_schema = {}
 for t in tables:
-    db_schema2[t] = {}  # create dictionary of attributes
+    db_schema[t.lower()] = {}  # create dictionary of attributes
     #print (i)
     attributes = db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + t + "'")
     for a in attributes:
-        db_schema2[t][a] = a
+        db_schema[t][a.lower()] = [a.lower()]
 print ("------")
-#print("Post table grab: %s" % db_schema2)       # debugger
-
+#print("Post table grab: %s" % db_schema)       # debugger
+db_schema = alias_lookup(db_schema)
+#print("-----\nPost table alias: %s" % db_schema)       # debugger
 
 
 # Examples of finding keywords in our database
-g = find_attribute("Capital", db_schema2)
-print (g)
-
-find_attribute("Language", db_schema2)
-find_attribute("Population", db_schema2)
-
-find_attribute("Strength", db_schema2)
-
+g = find_attribute("Capital", db_schema)
+print ("Capital  %s"%g)
+g = find_attribute("Language", db_schema)
+print ("Language  %s"%g)
+g =find_attribute("Population", db_schema)
+print ("Population  %s"%g)
+g =find_attribute("Size", db_schema)
+print ("Size  %s"%g)
+g = find_attribute("Strength", db_schema)
+print ("Strength  %s"%g)
 
 
 exit()  # not ready yet
@@ -156,7 +160,7 @@ db_run_querey(db, sql_output['SELECT'] + sql_output['FROM'] + sql_output['WHERE'
 
 
 exit()
-db_schema = { 
+db_schema_example = { 
             "Table1" :
               {
                   "Movies": ["Movies", "Films", "Film"],
@@ -166,18 +170,3 @@ db_schema = {
               },
             "Table2" : ["c1", "a1", "a2"]
             }
-
-db_schema_curr = { 
-            "Table1" :
-              {
-                  "Movies": "Movies",
-                  "c2": "c2",
-                  "c3": "c3",
-                  "c4": "c4"
-              },
-            "Table2" : ["c1", "a1", "a2"]
-            }
-
-
-print ("\n\n")
-print (db_schema)
