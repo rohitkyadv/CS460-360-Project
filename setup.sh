@@ -43,6 +43,7 @@ f_install_pythonApp() {
     #python3 -m nltk.downloader all
     python3 -m nltk.downloader punkt
     python3 -m nltk.downloader averaged_perceptron_tagger
+    python3 -m nltk.downloader treebank
 }
 
 

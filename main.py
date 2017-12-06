@@ -38,16 +38,8 @@ tagged = nltk.pos_tag(tokens)
 
 
 print ("Tagged words: %r\n" % tagged)
-print ("tag1: ", tagged[1])
-#print ("tag2: ", tagged[2])
-#print ("tag3: ", tagged[3])
-#print ("tag4: ", tagged[4])
-#print ("tag5: ", tagged[5])
 
 from nltk.corpus import treebank
-t = treebank.parsed_sents('wsj_0001.mrg')[0]
-
-
 from nltk import Tree
 
 dp1 = Tree('dp', [Tree('d', ['the']), Tree('np', ['dog'])])
@@ -61,12 +53,62 @@ tree.pretty_print()
 
 
 sent = ['I', 'shot', 'an', 'elephant', 'in', 'my', 'pajamas']
-#parser = nltk.ChartParser(groucho_grammar)
-#for tree in parser.parse(sent):
-#    print(tree)
+# http://www.nltk.org/book/ch08.html
+groucho_grammar = nltk.CFG.fromstring("""
+    S -> NP VP
+    PP -> P NP
+    NP -> Det N | Det N PP | 'I'
+    VP -> V NP | VP PP
+    Det -> 'an' | 'my'
+    N -> 'elephant' | 'pajamas'
+    V -> 'shot'
+    P -> 'in'
+    """)
+parser = nltk.ChartParser(groucho_grammar)
+for tree in parser.parse(sent):
+    print(tree)
+    tree.pretty_print()
 
 
 
+# Attempt to loop through a part of speech and create a grammer for our database schema
+pos_nn = ''
+first = True
+for i in tagged:
+    if (i[1] == 'NN'):
+        print (i)
+        if first:
+            pos_nn = i[0]
+            first = False
+        else:
+            pos_nn += ' | ' + i[0]
+print(pos_nn)
+
+pos_v = ''
+for i in tagged:
+    if (i[1] == 'V'):
+        print (i)
+        if first:
+            pos_v = i[0]
+            first = False
+        else:
+            pos_v += ' | ' + i[0]
+print(pos_v)
+
+my_groucho_grammar = nltk.CFG.fromstring("""
+    S -> NP VP
+    PP -> P NP
+    NP -> Det N | Det N PP | 'I'
+    VP -> V NP | VP PP
+    Det -> 'an' | 'my'
+    N -> 'elephant' | 'pajamas'
+    V -> 'shot'
+    P -> 'in'
+    """)
+
+
+
+exit()
 # this runs a database querey and returns a list of what was returned.
 def db_run_querey(db, query):
     # https://stackoverflow.com/a/13846183
