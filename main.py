@@ -38,9 +38,30 @@ parser = Parser()
 # http://www.thrivenotes.com/the-last-question/
 #sentance = "What is the population of the country France?"
 tree = parser.parse(sentence)
-print (tree)
-print(tree.pformat_latex_qtree())
+print ("--- Printing trees -----")
+print ("Tree 1: ",tree)
+print("\nTree 2: ", tree.pformat_latex_qtree())
+print("\nPretty tree:\n")
 tree.pretty_print()
+
+print ("--- Looking through the tree -----")
+print (tree[1])
+print (type(tree[1]))
+x = tree[1][1]
+print ("val: %s, type: %s" % (x, type(x)))
+print (len(x))
+print (len(tree))
+print (tree.label())
+print (tree[0].label())
+print (tree[0][0].label())
+
+print (len(tree[0][0]))
+print (len(tree[0][0][0]))
+print (tree[0][0][0])
+
+print(tree[0].leaves())
+print(tree[1].leaves())
+
 
 
 # this runs a database querey and returns a list of what was returned.
@@ -84,8 +105,8 @@ def db_run_querey(db, query):
 def find_attribute(keyword, schema):
     keyword = keyword.lower()
     # is keyword a table?
-    if keyword in schema:
-        print("%s is a table name" % keyword)
+    #if keyword in schema:
+    #    print("%s is a table name" % keyword)
     
     # is keyword a attribute of a table
     match_found = False
@@ -101,13 +122,17 @@ def find_attribute(keyword, schema):
     if not match_found:
         print ("No match found for %s" % keyword)
         return 0
-    #print(rtn_list)
+    #print("\n>>" + keyword + ": " + str(rtn_list))
     return rtn_list
 
 # SQL reference queries
 # SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.tables where table_schema='drugsdatabase';
 # SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase' and table_name = 'marketingstatus'
 # SELECT table_name, column_name FROM `COLUMNS` where table_schema = 'drugsdatabase'
+
+
+
+
 
 # SELECT
 # FROM
@@ -121,9 +146,11 @@ sql_output['WHERE']  = ""
 # build a schema of the database
 #db = "drugsdatabase"
 db = "world"
-tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
-print ("--------------------")
 
+print ("\n--- Get all tables from database ---")
+tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
+
+print ("\n--- Get attributes from all tables ---")
 db_schema = {}
 for t in tables:
     db_schema[t.lower()] = {}  # create dictionary of attributes
@@ -137,11 +164,17 @@ db_schema = alias_lookup(db_schema)
 #print("-----\nPost table alias: %s" % db_schema)       # debugger
 
 
+
 # Examples of finding keywords in our database
+print ("\n--- Examples of keword lookups ---")
 g = find_attribute("Capital", db_schema)
 print ("Capital  %s"%g)
 g = find_attribute("Language", db_schema)
 print ("Language  %s"%g)
+g = find_attribute("City", db_schema)
+print ("City  %s"%g)
+g = find_attribute("Town", db_schema)
+print ("Town  %s"%g)
 g =find_attribute("Population", db_schema)
 print ("Population  %s"%g)
 g =find_attribute("Size", db_schema)
