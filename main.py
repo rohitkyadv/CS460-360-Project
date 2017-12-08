@@ -44,23 +44,24 @@ print("\nTree 2: ", tree.pformat_latex_qtree())
 print("\nPretty tree:\n")
 tree.pretty_print()
 
-print ("--- Looking through the tree -----")
-print (tree[1])
-print (type(tree[1]))
-x = tree[1][1]
-print ("val: %s, type: %s" % (x, type(x)))
-print (len(x))
-print (len(tree))
-print (tree.label())
-print (tree[0].label())
-print (tree[0][0].label())
-
-print (len(tree[0][0]))
-print (len(tree[0][0][0]))
-print (tree[0][0][0])
-
-print(tree[0].leaves())
-print(tree[1].leaves())
+if False:
+    print ("--- Looking through the tree -----")
+    print (tree[1])
+    print (type(tree[1]))
+    x = tree[1][1]
+    print ("val: %s, type: %s" % (x, type(x)))
+    print (len(x))
+    print (len(tree))
+    print (tree.label())
+    print (tree[0].label())
+    print (tree[0][0].label())
+    
+    print (len(tree[0][0]))
+    print (len(tree[0][0][0]))
+    print (tree[0][0][0])
+    
+    print(tree[0].leaves())
+    print(tree[1].leaves())
 
 
 
