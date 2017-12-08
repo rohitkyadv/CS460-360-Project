@@ -1,6 +1,6 @@
 alias = {
 	"city" : {
-		"name"       : ["town"],
+		"name"       : ["town", "city"],
 		"countrycode" : ["areacode"],
 		"district"   : ["locality","region","precint"],
 		"population" : ["people","community","natives","peoples","communities","natives"],
