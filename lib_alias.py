@@ -11,7 +11,7 @@ alias = {
 		"percentage" : ["percentagetheyspeak", "languagepercentage","languagebarrier"],
 	},
 	"country" : {
-		"name"       : ["nation", "state"],
+		"name"       : ["nation", "state", "country"],
 		"continent"  : ["asia","europe","northamerica","africa", "antarctica","southamerica"],
 		"region"     : ["zone","area","territory","sector","place","suburb", "division"],
 		"surfacearea" : ["size","dimentions","sqft","squarefeet","spread"],
