@@ -20,6 +20,9 @@ file = open("log.log", "a")
 file.write("Time is: %s - %s\n" % (datetime.now(),  argv[1]))
 file.close()
 
+#-------------------------------------------------------------------------------
+# Basic sentence parsing & tokenization
+#-------------------------------------------------------------------------------
 
 # echo the sentence
 sentence = argv[1]
@@ -34,6 +37,10 @@ tagged = nltk.pos_tag(tokens)
 print ("Tagged words: %r\n" % tagged)
 
 
+#-------------------------------------------------------------------------------
+# Generate nltk tree
+#-------------------------------------------------------------------------------
+
 parser = Parser()
 # http://www.thrivenotes.com/the-last-question/
 #sentance = "What is the population of the country France?"
@@ -45,8 +52,10 @@ print("\nPretty tree:\n")
 tree.pretty_print()
 
 
+#-------------------------------------------------------------------------------
+# Build a schema of the database
+#-------------------------------------------------------------------------------
 
-# build a schema of the database
 #db = "drugsdatabase"
 db = "world"
 
@@ -67,86 +76,119 @@ db_schema = alias_lookup(db_schema)
 #print("-----\nPost table alias: %s" % db_schema)       # debugger
 
 
-
-# Examples of finding keywords in our database
-print ("\n--- Examples of keword lookups ---")
-g = find_attribute("Capital", db_schema)
-print ("Capital  %s"%g)
-g = find_attribute("Language", db_schema)
-print ("Language  %s"%g)
-g = find_attribute("City", db_schema)
-print ("City  %s"%g)
-g = find_attribute("Town", db_schema)
-print ("Town  %s"%g)
-g =find_attribute("Population", db_schema)
-print ("Population  %s"%g)
-g =find_attribute("Size", db_schema)
-print ("Size  %s"%g)
-g = find_attribute("Strength", db_schema)
-print ("Strength  %s"%g)
-
-
-
-if False:
-    print ("--- Looking through the tree -----")
-    print (tree[1])
-    print (type(tree[1]))
-    x = tree[1][1]
-    print ("val: %s, type: %s" % (x, type(x)))
-    print (len(x))
-    print (len(tree))
-    print (tree.label())
-    print (tree[0].label())
-    print (tree[0][0].label())
     
-    print (len(tree[0][0]))
-    print (len(tree[0][0][0]))
-    print (tree[0][0][0])
-    
-    print(tree[0].leaves())
-    print(tree[1].leaves())
-    
-    
-def traverseTree(tree):
+# https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
+def traverseTree(output, db_schema, tree):
+    print("Pre output: ", output)
     tree_len = len(tree)
     tree_height = tree.height()
     print ("Lable: %s    Len: %d   Height: %d    Leaves: %s" % (tree.label(), tree_len, tree.height(), tree.leaves()))
     tree.pretty_print()
+    
+    # Look at every branch on the tree
     for i in range(tree_len):
         print ("i: ", i)
         if tree_height >2:
-            traverseTree(tree[i])
+            
+            # peak ahead to see if it's a D if so 
+            output_rtn = traverseTree(output, db_schema, tree[i])
+            #if (output_rtn != 0 and type(output_rtn) > 0):
+            print("output_rtn: ", output_rtn)
+            output = output_rtn
+        else:
+            pos = tree.label()
+            word = tree[0]
+            print ("## word is: %s,  pos is: %s" % (word, pos))
+            if pos == 'NN':
+                rtn = find_attribute(word, db_schema)
+                print("return was: %s, len is: %s" % (rtn, len(rtn)))
+                if (rtn != 0):
+                    #output['SELECT'].extend(rtn)
+                    output = addListToDic(output, 'SELECT', rtn)
+                    print ("output: %s" % output['SELECT'])
+    return output
+            
         # height 2 is pos, height 1 is the word
         
 # SELECT
 # FROM
 # WHERE
 sql_output = {}
-sql_output['SELECT'] = ""
-sql_output['FROM']   = ""
-sql_output['WHERE']  = ""
+sql_output['SELECT'] = []
+sql_output['FROM']   = []
+sql_output['WHERE']  = []
+
+attributes = []
+
+
+# give a dictionary and key then append list items as such x | x | x | x
+def addListToDic(dic, key, L):
+    for i in L:
+        if (len(dic[key]) == 0):
+            dic[key] = L
+        else:
+            dic[key].extend(L)
+            
+    # print ("dic function: ", dic)     # debugger
+    return dic
 
 print ("--- Traversing the tree ---")
-traverseTree(tree)
+traverseTree(sql_output, db_schema, tree)
 
 
+#-------------------------------------------------------------------------------
+# build the querry
+#-------------------------------------------------------------------------------
+
+query = sql_output['SELECT'] + sql_output['FROM'] + sql_output['WHERE']
+SELECT_L = sql_output['SELECT']
+SELECT = ""
 
 
-exit()  # not ready yet
+# SELECT clause
+for idx, val in enumerate(SELECT_L):
+    if (len(SELECT) == 0):
+        SELECT += 'Select ' + val[0] + "." + val[1]
+    else:
+        
+        SELECT += ', ' + val[0] + "." + val[1]
+        
+print (SELECT)
+
+# FROM clause
+#FROM_L = sql_output['FROM']
+FROM_L = []
+FROM_L.extend(SELECT_L)
+FROM_L.extend(sql_output['WHERE'])
+FROM = ""
+for idx, val in enumerate(FROM_L):
+    if (len(FROM) == 0):
+        FROM += ' FROM ' + val[0] + "." + val[1]
+    else:
+        
+        FROM += ' NATURAL JOIN ' + val[0]
+
+# WHERE clause
+WHERE_L = sql_output['FROM']
+WHERE = ""
+for idx, val in enumerate(WHERE_L):
+    if (len(WHERE) == 0):
+        WHERE += ' WHERE ' + val[0] + "." + val[1]
+    else:
+        
+        WHERE += ', ' + val[0] + "." + val[1]
+
+
+query = SELECT + FROM + WHERE + ";"
+print("\nOutput Query: ", query)
+
+
+#-------------------------------------------------------------------------------
 # Run output SQL query
-db_run_querey(db, sql_output['SELECT'] + sql_output['FROM'] + sql_output['WHERE'])
+#exit()  # not ready yet
+#-------------------------------------------------------------------------------
+
+db_run_querey(db, query)
 
 
-
-
-exit()
-db_schema_example = { 
-            "Table1" :
-              {
-                  "Movies": ["Movies", "Films", "Film"],
-                  "c2": ["c2", "a1", "a2"],
-                  "c3": ["c3"],
-                  "c4": ["c4"]
-              },
-            "Table2" : ["c1", "a1", "a2"]
-            }
+# end program
