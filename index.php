@@ -13,7 +13,10 @@
   .speech img {float: right; width: 40px }
 </style>
 
-Example sentence: What is the capital and size of the country France or Germany 
+Example sentences: <br>
+What is the capital and size of the country France or Germany <br>
+What is the capital and GNP and size  of the country France or Germany<br>
+What is the capital, GNP, and size  of the country France or Germany<br><br>
 
 <!-- Search Form -->
 <form id="labnol" method="post" action="index.php"> <!action="https://www.google.com/search">
