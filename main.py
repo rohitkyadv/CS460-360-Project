@@ -297,7 +297,11 @@ print("\nOutput Query: ", query)
 #-------------------------------------------------------------------------------
 # Run output SQL query
 #-------------------------------------------------------------------------------
-
+print (SELECT_L[0][1], end='')
+del SELECT_L[0]         # delete first item
+for header in SELECT_L:
+    print (", ", header[1], end='')
+print()
 db_run_querey(db, query)
 
 # end program
