@@ -58,10 +58,13 @@ def find_attribute(keyword, schema):
         #print ("table: %s" % t)                # debugger
         for a in schema[t]:                     # search attributes in table
             #print ("  attribute: %s" % a)      # debugger
-            if keyword in schema[t][a]:         # test if keyword exits in the list of aliases for a given attribute
-                #print("Found match for %s in table %s, column: %s" % (keyword, t, a))      # debugger
-                match_found = True
-                rtn_list.append((t,a))          # add result tuple to return list
+            for idx, val in enumerate(schema[t][a]):
+                #print ("testing: ", val.lower())   # debugger
+                if keyword == val.lower():     # test if keyword exits in the list of aliases for a given attribute
+                    #print("Found match for %s in table %s, column: %s" % (keyword, t, a))      # debugger
+                    match_found = True
+                    rtn_list.append((t,a))          # add result tuple to return list
+                    break                           # matched this attribute. break out and continue testing other attributes
     if not match_found:
         print ("No match found for %s" % keyword)
         return 0
