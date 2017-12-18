@@ -128,13 +128,11 @@ attributes = []
 
 # give a dictionary and key then append list items as such x | x | x | x
 def addListToDic(dic, key, L):
+    # print ("add2L: dic: %s,   L: %s" % (dic, L))  # debugger
     for i in L:
-        if (len(dic[key]) == 0):
-            dic[key] = L
-        else:
-            dic[key].extend(L)
+        dic[key].extend(L)
             
-    # print ("dic function: ", dic)     # debugger
+    # print ("dic function: ", dic)                 # debugger
     return dic
 
 print ("--- Traversing the tree ---")
@@ -196,6 +194,5 @@ print("\nOutput Query: ", query)
 #-------------------------------------------------------------------------------
 
 db_run_querey(db, query)
-
 
 # end program
