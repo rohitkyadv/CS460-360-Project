@@ -95,6 +95,10 @@ def traverseTree(output, db_schema, tree):
     for i in range(tree_len):
         print ("i: ", i)
         if tree_height >2:
+            pos = tree.label()
+            #if pos == "NP":
+                #if (tree[0] == "DT")
+                    # add to select
             
             # peak ahead to see if it's a D if so 
             output_rtn = traverseTree(output, db_schema, tree[i])
@@ -116,6 +120,106 @@ def traverseTree(output, db_schema, tree):
             
         # height 2 is pos, height 1 is the word
         
+        
+        
+def traverseTree2(output, db_schema, tagged):
+    state = None
+    where_tbls = []
+    where_conds = []
+    for idx, val in enumerate(tagged):
+        print ("idx: %d, val: %s, \tstate: %s" % (idx, val, state))
+        if state == 'selecting':
+            if  val [1] == 'NN':
+                rtn = find_attribute(val[0], db_schema)
+                print ('rtn ', rtn)
+                if not rtn == 0:
+                    output['SELECT'].extend(rtn)
+                
+                #peak ahead
+                if idx + 1 < len(tagged):
+                    if not tagged[idx+1][1] == "CC":
+                        state = None
+            if val[1] == 'CC':
+                continue
+            
+            
+        elif state == 'where':
+            print("where")
+            if val[1] == 'DT':
+                state = 'where-att'
+                continue
+            elif  val [1][0:2] == 'NN':
+                rtn = find_attribute(val[0], db_schema)
+                print ('rtn ', rtn)
+                if not rtn == 0:
+                    output['SELECT'].extend(rtn)
+                
+                #peak ahead
+                if idx + 1 < len(tagged):
+                    if not tagged[idx+1][1] == "CC":
+                        state = None
+            if val[1] == 'CC':
+                continue
+        
+        elif state == 'where-att':
+            print ("where-att")
+            if val [1][0:2] == 'NN':
+                rtn = find_attribute(val[0], db_schema)
+                print ('rtn ', rtn)
+                if not rtn == 0:
+                    where_tbls.extend(rtn)
+                    print ("output where ", output['WHERE'])
+                else:
+                    print ("## potential sentence format error")
+                    continue
+                #peak ahead
+                if idx + 1 < len(tagged):
+                    if tagged[idx+1][1] == "CC":
+                        continue
+                    if tagged[idx+1][1][0:2] == 'NN':
+                        state = 'where-cond'
+                    else:
+                        print ("## potential sentence format error")
+                        state = None
+                        
+        elif state == 'where-cond':
+            print ("where-att")
+            if val [1][0:2] == 'NN':
+                # condition value
+                where_conds.append(val[0])
+                
+                #peak ahead
+                if idx + 1 < len(tagged):
+                    if tagged[idx+1][1] == "CC":
+                        continue
+                    else:
+                        state = None
+                    
+
+        elif (val[1] == 'DT' or val[1].lower() == 'where'):
+            state = 'selecting'
+        elif (val[1] == 'IN'):
+            state = 'where'
+    
+    print("---\npost where lists")
+    print (where_tbls)
+    print (where_conds)
+    
+    # combine lists
+    myoutput = ""
+    for att in where_tbls:
+        for cond in where_conds:
+            if len(myoutput) == 0:
+                myoutput += ' WHERE ' + att[0] + '.' + att[1] + '="' + cond + '"'
+            else:
+                myoutput += ' or ' + att[0] + '.' + att[1] + '="' + cond + '"'
+                
+    print ("post where combine: ", myoutput)
+    output['WHERE'] = myoutput
+    
+    
+    
+    
 # SELECT
 # FROM
 # WHERE
@@ -136,15 +240,14 @@ def addListToDic(dic, key, L):
     return dic
 
 print ("--- Traversing the tree ---")
-traverseTree(sql_output, db_schema, tree)
-
+#traverseTree(sql_output, db_schema, tree)
+traverseTree2(sql_output, db_schema, tagged)
 
 #-------------------------------------------------------------------------------
 # build the querry
 #-------------------------------------------------------------------------------
 
 print ("\n\n--- Building the querry ---")
-query = sql_output['SELECT'] + sql_output['FROM'] + sql_output['WHERE']
 print ("Query data: ", sql_output)
 SELECT_L = sql_output['SELECT']
 SELECT = ""
@@ -160,7 +263,7 @@ for idx, val in enumerate(SELECT_L):
 #FROM_L = sql_output['FROM']
 FROM_L = []
 FROM_L.extend(SELECT_L)
-FROM_L.extend(sql_output['WHERE'])
+#FROM_L.extend(sql_output['WHERE'])
 FROM_Added = []                             # contains unique list of tables we've added
 FROM = ""
 for idx, val in enumerate(FROM_L):
@@ -185,7 +288,8 @@ for idx, val in enumerate(WHERE_L):
 print ("Select: %r" % SELECT)
 print ("From:   %r" % FROM)
 print ("Where:  %r" % WHERE)
-query = SELECT + FROM + WHERE + " LIMIT 15;"
+print ("Where2:  %r" % sql_output['WHERE'])
+query = SELECT + FROM + sql_output['WHERE'] + " LIMIT 15;"
 print("\nOutput Query: ", query)
 
 
