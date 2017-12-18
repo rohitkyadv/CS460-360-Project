@@ -59,18 +59,17 @@ tree.pretty_print()
 #db = "drugsdatabase"
 db = "world"
 
-print ("\n--- Get all tables from database ---")
+#print ("\n--- Get all tables from database ---")
 tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
-
-print ("\n--- Get attributes from all tables ---")
+#print ("\n--- Get attributes from all tables ---")
 db_schema = {}
 for t in tables:
-    db_schema[t] = {}  # create dictionary of attributes
+    db_schema[t[0]] = {}  # create dictionary of attributes
     #print (i)
-    attributes = db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + t + "'")
+    attributes = db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + t[0] + "'")
     for a in attributes:
-        db_schema[t][a] = [a]
-print ("------")
+        db_schema[t[0]][a[0]] = [a[0]]
+#print ("------")
 #print("Post table grab: %s" % db_schema)               # debugger
 db_schema = alias_lookup(db_schema)
 #print("-----\nPost table alias: %s" % db_schema)       # debugger
@@ -79,6 +78,7 @@ db_schema = alias_lookup(db_schema)
 find_attribute('Name', db_schema)
 find_attribute('language', db_schema)
 
+#exit()
 #-------------------------------------------------------------------------------
 # Traverse the tree
 #-------------------------------------------------------------------------------
@@ -123,53 +123,53 @@ def traverseTree(output, db_schema, tree):
         
         
 def traverseTree2(output, db_schema, tagged):
-    print (tagged)
+    #print (tagged)
     state = None
     where_tbls = []
     where_conds = []
     for idx, val in enumerate(tagged):
-        print ("idx: %d, val: %s, \tstate: %s" % (idx, val, state))
+        #print ("idx: %d, val: %s, \tstate: %s" % (idx, val, state))
         if state == 'selecting':
             if  val [1][0:2] == 'NN':
                 rtn = find_attribute(val[0], db_schema)
-                print ('rtn ', rtn)
+                #print ('rtn ', rtn)
                 if not rtn == 0:
                     output['SELECT'].extend(rtn)
                 
                 #peak ahead
                 if idx + 1 < len(tagged):
-                    if not tagged[idx+1][1] == "CC":
+                    if not tagged[idx+1][1] == "CC" and not tagged[idx+1][1] == ",":
                         state = None
             if val[1] == 'CC':
                 continue
             
             
         elif state == 'where':
-            print("where")
+            #print("where")
             if val[1][0:2] == 'DT':
                 state = 'where-att'
                 continue
             elif  val [1][0:2] == 'NN':
                 rtn = find_attribute(val[0], db_schema)
-                print ('rtn ', rtn)
+                #print ('rtn ', rtn)
                 if not rtn == 0:
                     output['SELECT'].extend(rtn)
                 
                 #peak ahead
                 if idx + 1 < len(tagged):
-                    if not tagged[idx+1][1] == "CC":
+                    if not tagged[idx+1][1] == "CC" and not tagged[idx+1][1] == ",":
                         state = None
             if val[1] == 'CC':
                 continue
         
         elif state == 'where-att':
-            print ("where-att")
+            #print ("where-att")
             if val [1][0:2] == 'NN':
                 rtn = find_attribute(val[0], db_schema)
-                print ('rtn ', rtn)
+                #print ('rtn ', rtn)
                 if not rtn == 0:
                     where_tbls.extend(rtn)
-                    print ("output where ", output['WHERE'])
+                    #print ("output where ", output['WHERE'])
                 else:
                     print ("## potential sentence format error")
                     continue
@@ -184,14 +184,14 @@ def traverseTree2(output, db_schema, tagged):
                         state = None
                         
         elif state == 'where-cond':
-            print ("where-att")
+            #print ("where-att")
             if val [1][0:2] == 'NN':
                 # condition value
                 where_conds.append(val[0])
                 
                 #peak ahead
                 if idx + 1 < len(tagged):
-                    if tagged[idx+1][1] == "CC":
+                    if tagged[idx+1][1] == "CC" or tagged[idx+1][1] == ",":
                         continue
                     else:
                         state = None
@@ -202,9 +202,9 @@ def traverseTree2(output, db_schema, tagged):
         elif (val[1][0:2] == 'IN'):
             state = 'where'
     
-    print("---\npost where lists")
-    print (where_tbls)
-    print (where_conds)
+    #print("---\npost where lists")
+    #print (where_tbls)
+    #print (where_conds)
     
     # combine lists
     myoutput = ""
@@ -215,7 +215,7 @@ def traverseTree2(output, db_schema, tagged):
             else:
                 myoutput += ' or ' + att[0] + '.' + att[1] + '="' + cond + '"'
                 
-    print ("post where combine: ", myoutput)
+    #print ("post where combine: ", myoutput)
     output['WHERE'] = myoutput
     
     
@@ -240,7 +240,7 @@ def addListToDic(dic, key, L):
     # print ("dic function: ", dic)                 # debugger
     return dic
 
-print ("--- Traversing the tree ---")
+#print ("--- Traversing the tree ---")
 #traverseTree(sql_output, db_schema, tree)
 traverseTree2(sql_output, db_schema, tagged)
 
@@ -249,7 +249,7 @@ traverseTree2(sql_output, db_schema, tagged)
 #-------------------------------------------------------------------------------
 
 print ("\n\n--- Building the querry ---")
-print ("Query data: ", sql_output)
+#print ("Query data: ", sql_output)
 SELECT_L = sql_output['SELECT']
 SELECT = ""
 # SELECT clause
@@ -288,8 +288,8 @@ for idx, val in enumerate(WHERE_L):
 
 print ("Select: %r" % SELECT)
 print ("From:   %r" % FROM)
-print ("Where:  %r" % WHERE)
-print ("Where2:  %r" % sql_output['WHERE'])
+#print ("Where:  %r" % WHERE)
+print ("Where:  %r" % sql_output['WHERE'])
 query = SELECT + FROM + sql_output['WHERE'] + " LIMIT 15;"
 print("\nOutput Query: ", query)
 
@@ -297,11 +297,15 @@ print("\nOutput Query: ", query)
 #-------------------------------------------------------------------------------
 # Run output SQL query
 #-------------------------------------------------------------------------------
-print (SELECT_L[0][1], end='')
+print ("\n" +SELECT_L[0][1], end='')
 del SELECT_L[0]         # delete first item
 for header in SELECT_L:
     print (", ", header[1], end='')
 print()
-db_run_querey(db, query)
+output = db_run_querey(db, query)
+for i, r in enumerate(output):
+    for i, e in enumerate(r):
+        print ("%s\t" % str(e), end='')
+    print()
 
 # end program

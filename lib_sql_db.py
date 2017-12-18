@@ -35,8 +35,8 @@ def db_run_querey(db, query):
             #print (cur.fetchall())
             for response in cur:
                 #print("Response: %r\tType: %r" % (response, type(response)))   # response is a tuple
-                print(response)
-                rtn_list.append(response[0])
+                #print(response)
+                rtn_list.append(response)
             #print ("rtn_list: %r" % rtn_list)
         cur.close()
         conn.close()
