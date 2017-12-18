@@ -145,7 +145,9 @@ traverseTree(sql_output, db_schema, tree)
 # build the querry
 #-------------------------------------------------------------------------------
 
+print ("\n\n--- Building the querry ---")
 query = sql_output['SELECT'] + sql_output['FROM'] + sql_output['WHERE']
+print ("Query data: ", sql_output)
 SELECT_L = sql_output['SELECT']
 SELECT = ""
 # SELECT clause
@@ -154,7 +156,6 @@ for idx, val in enumerate(SELECT_L):
         SELECT += 'Select ' + val[0] + "." + val[1]
     else:
         SELECT += ', ' + val[0] + "." + val[1]
-print (SELECT)
 
 
 # FROM clause
@@ -162,13 +163,16 @@ print (SELECT)
 FROM_L = []
 FROM_L.extend(SELECT_L)
 FROM_L.extend(sql_output['WHERE'])
+FROM_Added = []                             # contains unique list of tables we've added
 FROM = ""
 for idx, val in enumerate(FROM_L):
-    if (len(FROM) == 0):
+    if (len(FROM) == 0):                    # if empty
         FROM += ' FROM ' + val[0]
+        FROM_Added.append(val[0])           # add first to unique list
     else:
-        if (val[0] not in FROM):
+        if (val[0] not in FROM_Added):      # test if we've already added this table before
             FROM += ' NATURAL JOIN ' + val[0]
+            FROM_Added.append(val[0])       # Add item to unique list
 
 # WHERE clause
 WHERE_L = sql_output['FROM']
@@ -180,7 +184,9 @@ for idx, val in enumerate(WHERE_L):
         
         WHERE += ', ' + val[0] + "." + val[1]
 
-
+print ("Select: %r" % SELECT)
+print ("From:   %r" % FROM)
+print ("Where:  %r" % WHERE)
 query = SELECT + FROM + WHERE + " LIMIT 15;"
 print("\nOutput Query: ", query)
 
