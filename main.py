@@ -65,18 +65,24 @@ tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables whe
 print ("\n--- Get attributes from all tables ---")
 db_schema = {}
 for t in tables:
-    db_schema[t.lower()] = {}  # create dictionary of attributes
+    db_schema[t] = {}  # create dictionary of attributes
     #print (i)
     attributes = db_run_querey('information_schema', "SELECT column_name FROM `COLUMNS` where table_schema = '" + db + "' and table_name = '" + t + "'")
     for a in attributes:
-        db_schema[t][a.lower()] = [a.lower()]
+        db_schema[t][a] = [a]
 print ("------")
 #print("Post table grab: %s" % db_schema)               # debugger
 db_schema = alias_lookup(db_schema)
 #print("-----\nPost table alias: %s" % db_schema)       # debugger
 
 
-    
+find_attribute('Name', db_schema)
+find_attribute('language', db_schema)
+
+#-------------------------------------------------------------------------------
+# Traverse the tree
+#-------------------------------------------------------------------------------
+
 # https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
 def traverseTree(output, db_schema, tree):
     print("Pre output: ", output)
@@ -101,8 +107,8 @@ def traverseTree(output, db_schema, tree):
             print ("## word is: %s,  pos is: %s" % (word, pos))
             if pos == 'NN':
                 rtn = find_attribute(word, db_schema)
-                print("return was: %s, len is: %s" % (rtn, len(rtn)))
                 if (rtn != 0):
+                    print("return was: %s, len is: %s" % (rtn, len(rtn)))
                     #output['SELECT'].extend(rtn)
                     output = addListToDic(output, 'SELECT', rtn)
                     print ("output: %s" % output['SELECT'])
@@ -119,7 +125,6 @@ sql_output['FROM']   = []
 sql_output['WHERE']  = []
 
 attributes = []
-
 
 # give a dictionary and key then append list items as such x | x | x | x
 def addListToDic(dic, key, L):
@@ -143,17 +148,14 @@ traverseTree(sql_output, db_schema, tree)
 query = sql_output['SELECT'] + sql_output['FROM'] + sql_output['WHERE']
 SELECT_L = sql_output['SELECT']
 SELECT = ""
-
-
 # SELECT clause
 for idx, val in enumerate(SELECT_L):
     if (len(SELECT) == 0):
         SELECT += 'Select ' + val[0] + "." + val[1]
     else:
-        
         SELECT += ', ' + val[0] + "." + val[1]
-        
 print (SELECT)
+
 
 # FROM clause
 #FROM_L = sql_output['FROM']
@@ -163,10 +165,10 @@ FROM_L.extend(sql_output['WHERE'])
 FROM = ""
 for idx, val in enumerate(FROM_L):
     if (len(FROM) == 0):
-        FROM += ' FROM ' + val[0] + "." + val[1]
+        FROM += ' FROM ' + val[0]
     else:
-        
-        FROM += ' NATURAL JOIN ' + val[0]
+        if (val[0] not in FROM):
+            FROM += ' NATURAL JOIN ' + val[0]
 
 # WHERE clause
 WHERE_L = sql_output['FROM']
@@ -179,13 +181,12 @@ for idx, val in enumerate(WHERE_L):
         WHERE += ', ' + val[0] + "." + val[1]
 
 
-query = SELECT + FROM + WHERE + ";"
+query = SELECT + FROM + WHERE + " LIMIT 15;"
 print("\nOutput Query: ", query)
 
 
 #-------------------------------------------------------------------------------
 # Run output SQL query
-#exit()  # not ready yet
 #-------------------------------------------------------------------------------
 
 db_run_querey(db, query)

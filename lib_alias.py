@@ -1,30 +1,30 @@
 alias = {
 	"city" : {
-		"name"       : ["town", "city"],
-		"countrycode" : ["areacode"],
-		"district"   : ["locality","region","precint"],
-		"population" : ["people","community","natives","peoples","communities","natives"],
+		"Name"       : ["town", "city"],
+		"CountryCode" : ["areacode"],
+		"District"   : ["locality","region","precint"],
+		"Population" : ["people","community","natives","peoples","communities","natives"],
 	},
 	"countrylanguage" : {
-		"countrycode" : ["zip code"],
-		"language"   : ["accent","style","terminology","tongue"],
-		"percentage" : ["percentagetheyspeak", "languagepercentage","languagebarrier"],
+		"CountryCode" : ["zip code"],
+		"Language"   : ["accent","style","terminology","tongue"],
+		"Percentage" : ["percentagetheyspeak", "languagepercentage","languagebarrier"],
 	},
 	"country" : {
-		"name"       : ["nation", "state", "country"],
-		"continent"  : ["asia","europe","northamerica","africa", "antarctica","southamerica"],
-		"region"     : ["zone","area","territory","sector","place","suburb", "division"],
-		"surfacearea" : ["size","dimentions","sqft","squarefeet","spread"],
-		"indepyear"  : ["independence","indenpendenceyear"],
-		"population" : ["people","community","natives","peoples","communities","natives"],
-		"lifeexpectancy" : ["lifeexpectancy","ratiooflife"],
-		"gnp"        : ["grossnationalproduct", "marketvalue"],
-		"gnpold"     : ["oldgrossnationalproduct", "oldmarketvalue","pastmarketvalue", "pastgrossnationalproduct"],
-		"localname"  : ["nickname"],
-		"governmentform" : ["monarchy", "constitutionalgovernment","democracy","dictatorship","federalsystems"],
-		"headofstate" : ["president", "leader","prince","majesty"],
-		"capital"    : ["central","maincity"],
-		"code2"      : ["shortname"]
+		"Name"       : ["nation", "state", "country"],
+		"Continent"  : ["asia","europe","northamerica","africa", "antarctica","southamerica"],
+		"Region"     : ["zone","area","territory","sector","place","suburb", "division"],
+		"SurfaceArea" : ["size","dimentions","sqft","squarefeet","spread"],
+		"IndepYear"  : ["independence","indenpendenceyear"],
+		"Population" : ["people","community","natives","peoples","communities","natives"],
+		"LifeExpectancy" : ["lifeexpectancy","ratiooflife"],
+		"GNP"        : ["grossnationalproduct", "marketvalue"],
+		"GNPOld"     : ["oldgrossnationalproduct", "oldmarketvalue","pastmarketvalue", "pastgrossnationalproduct"],
+		"LocalName"  : ["nickname"],
+		"GovernmentForm" : ["monarchy", "constitutionalgovernment","democracy","dictatorship","federalsystems"],
+		"HeadOfState" : ["president", "leader","prince","majesty"],
+		"Capital"    : ["central","maincity"],
+		"Code2"      : ["shortname"]
   }
 }
 
