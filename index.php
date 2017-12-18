@@ -17,6 +17,7 @@ Example sentences: <br>
 What is the capital and size of the country France or Germany <br>
 What is the capital and GNP and size  of the country France or Germany<br>
 What is the capital, GNP, and size  of the country France or Germany<br><br>
+list the country
 
 <!-- Search Form -->
 <form id="labnol" method="post" action="index.php"> <!action="https://www.google.com/search">
