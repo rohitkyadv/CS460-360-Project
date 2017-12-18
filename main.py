@@ -46,9 +46,9 @@ parser = Parser()
 #sentance = "What is the population of the country France?"
 tree = parser.parse(sentence)
 print ("--- Printing trees -----")
-print ("Tree 1: ",tree)
-print("\nTree 2: ", tree.pformat_latex_qtree())
-print("\nPretty tree:\n")
+#print ("Tree 1: ",tree)
+#print("\nTree 2: ", tree.pformat_latex_qtree())
+#print("\nPretty tree:\n")
 tree.pretty_print()
 
 
@@ -123,13 +123,14 @@ def traverseTree(output, db_schema, tree):
         
         
 def traverseTree2(output, db_schema, tagged):
+    print (tagged)
     state = None
     where_tbls = []
     where_conds = []
     for idx, val in enumerate(tagged):
         print ("idx: %d, val: %s, \tstate: %s" % (idx, val, state))
         if state == 'selecting':
-            if  val [1] == 'NN':
+            if  val [1][0:2] == 'NN':
                 rtn = find_attribute(val[0], db_schema)
                 print ('rtn ', rtn)
                 if not rtn == 0:
@@ -145,7 +146,7 @@ def traverseTree2(output, db_schema, tagged):
             
         elif state == 'where':
             print("where")
-            if val[1] == 'DT':
+            if val[1][0:2] == 'DT':
                 state = 'where-att'
                 continue
             elif  val [1][0:2] == 'NN':
@@ -196,9 +197,9 @@ def traverseTree2(output, db_schema, tagged):
                         state = None
                     
 
-        elif (val[1] == 'DT' or val[1].lower() == 'where'):
+        elif (val[1][0:2] == 'DT' or val[1].lower() == 'where'):
             state = 'selecting'
-        elif (val[1] == 'IN'):
+        elif (val[1][0:2] == 'IN'):
             state = 'where'
     
     print("---\npost where lists")
