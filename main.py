@@ -75,9 +75,9 @@ for t in tables:
 db_schema = alias_lookup(db_schema)
 #print("-----\nPost table alias: %s" % db_schema)       # debugger
 
-
-find_attribute('Name', db_schema)
-find_attribute('language', db_schema)
+# Test debugging
+#find_attribute('Name', db_schema)
+#find_attribute('language', db_schema)
 
 #exit()
 #-------------------------------------------------------------------------------
