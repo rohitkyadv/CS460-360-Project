@@ -58,6 +58,7 @@ tree.pretty_print()
 
 #db = "drugsdatabase"
 db = "Genes_Proteins"
+print ("Using database: %s" % db)
 
 #print ("\n--- Get all tables from database ---")
 tables = db_run_querey(db, "SELECT table_name FROM information_schema.tables where table_schema='" + db + "';")
