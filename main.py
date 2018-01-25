@@ -11,8 +11,8 @@ from lib_sql_db import db_run_querey, find_attribute
 # print current time to file to prove we ran
 print (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 #print "\nArg1: ", argv[1:]  # Will print out all arguments starting at 1
-if len(argv) < 2:
-    print("A sentence must be included")
+if len(argv) < 3:
+    print("A db and sentence must be included")
     exit()
 
 # Write sentence to file for logging
@@ -23,9 +23,8 @@ file.close()
 #-------------------------------------------------------------------------------
 # Basic sentence parsing & tokenization
 #-------------------------------------------------------------------------------
-
 # echo the sentence
-sentence = argv[1]
+sentence = argv[2]
 print ("Sentence is: %s" % sentence)
 
 # separates sentence into tokens or individual words
@@ -56,8 +55,12 @@ tree.pretty_print()
 # Build a schema of the database
 #-------------------------------------------------------------------------------
 
+db = argv[1]
 #db = "drugsdatabase"
-db = "Genes_Proteins"
+#db = "Genes_Proteins"
+if not (db == "world" or db == "drugsdatabase" or db == "Genes_Proteins"):
+    print ("%r not a authorized database." % db)
+    exit(1)
 print ("Using database: %s" % db)
 
 #print ("\n--- Get all tables from database ---")

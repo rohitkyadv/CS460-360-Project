@@ -47,7 +47,16 @@ Example sentences for each database: <br>
 
 <!-- Search Form -->
 <form id="labnol" method="post" action="index.php"> <!action="https://www.google.com/search">
-  Sentence: <div class="speech">
+  <br> Database Select: 
+  <select name="db_select" size="3">
+    <option value="drugsdatabase">drugsdatabase</option>
+    <option value="Genes_Proteins">Genes_Proteins</option>
+    <option value="world" selected>world</option>
+  </select>
+  <br>
+  
+  <br>Sentence: 
+  <div class="speech">
     <input type="text" name="raw" id="transcript" placeholder="Speak" />
     <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />
   </div>
@@ -61,7 +70,7 @@ if ($data != null) {
   echo "Output: <br>";
   
   $command = escapeshellcmd(getcwd() . '/main.py');
-  $arg     = " " . "\"" . $_POST["raw"] . "\"";
+  $arg     = " " .  $_POST["db_select"] . " "  . "\"" . $_POST["raw"] . "\"";
   $output = shell_exec($command . $arg);
   echo "<pre>" . $output . "<pre>";    // nl2br converts newlines to html <br>
 }
