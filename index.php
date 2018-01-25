@@ -12,12 +12,38 @@
   .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
   .speech img {float: right; width: 40px }
 </style>
+<style>
+  table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+  }
+</style>
 
-Example sentences: <br>
-What is the capital and size of the country France or Germany <br>
-What is the capital and GNP and size  of the country France or Germany<br>
-What is the capital, GNP, and size  of the country France or Germany<br><br>
-list the country
+Example sentences for each database: <br>
+<table>
+  <tr>
+<tr>
+    <th class="tg-yw4l">world</th>
+    <th class="tg-yw4l">Genes_Proteins</th>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">What is the capital and size of the country France or Germany</td>
+    <td class="tg-yw4l">What is the Function of UniProt proteins Q9UKT8 and Q9NVA1</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">What is the capital and GNP and size  of the country France or Germany</td>
+    <td class="tg-yw4l">What is the function of the proteinname Putative-replication</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">What is the capital, GNP, and size  of the country France or Germany</td>
+    <td class="tg-yw4l">What is the function and proteinID of the proteinname Putative-replication</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">list the country</td>
+    <td class="tg-yw4l"></td>
+  </tr>
+</table>
 
 <!-- Search Form -->
 <form id="labnol" method="post" action="index.php"> <!action="https://www.google.com/search">
