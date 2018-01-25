@@ -141,7 +141,7 @@ def traverseTree2(output, db_schema, tagged):
                 if idx + 1 < len(tagged):
                     if not tagged[idx+1][1] == "CC" and not tagged[idx+1][1] == ",":
                         state = None
-            if val[1] == 'CC':
+            elif val[1] == 'CC':
                 continue
             
             
@@ -198,9 +198,9 @@ def traverseTree2(output, db_schema, tagged):
                         state = None
                     
 
-        elif (val[1][0:2] == 'DT' or val[1].lower() == 'where'):
+        elif (val[1][0:2] == 'DT'):
             state = 'selecting'
-        elif (val[1][0:2] == 'IN'):
+        elif (val[1][0:2] == 'IN' or val[1].lower() == 'where'):
             state = 'where'
     
     #print("---\npost where lists")
@@ -208,16 +208,16 @@ def traverseTree2(output, db_schema, tagged):
     #print (where_conds)
     
     # combine lists
-    myoutput = ""
+    whereoutput  = ""
     for att in where_tbls:
         for cond in where_conds:
-            if len(myoutput) == 0:
-                myoutput += ' WHERE ' + att[0] + '.' + att[1] + '="' + cond + '"'
+            if len(whereoutput ) == 0:
+                whereoutput  += ' WHERE ' + att[0] + '.' + att[1] + '="' + cond + '"'
             else:
-                myoutput += ' or ' + att[0] + '.' + att[1] + '="' + cond + '"'
+                whereoutput  += ' or ' + att[0] + '.' + att[1] + '="' + cond + '"'
                 
-    #print ("post where combine: ", myoutput)
-    output['WHERE'] = myoutput
+    #print ("post where combine: ", whereoutput )
+    output['WHERE'] = whereoutput 
     
     
     
