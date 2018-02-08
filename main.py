@@ -58,7 +58,7 @@ tree.pretty_print()
 db = argv[1]
 #db = "drugsdatabase"
 #db = "Genes_Proteins"
-if not (db == "world" or db == "drugsdatabase" or db == "Genes_Proteins"):
+if not (db == "world" or db == "drugsdatabase" or db == "Genes_Proteins" or db == "sakila"):
     print ("%r not a authorized database." % db)
     exit(1)
 print ("Using database: %s" % db)

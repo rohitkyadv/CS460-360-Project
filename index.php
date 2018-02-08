@@ -48,10 +48,11 @@ Example sentences for each database: <br>
 <!-- Search Form -->
 <form id="labnol" method="post" action="index.php"> <!action="https://www.google.com/search">
   <br> Database Select: 
-  <select name="db_select" size="3">
+  <select name="db_select" size="4">
     <option value="drugsdatabase">drugsdatabase</option>
     <option value="Genes_Proteins">Genes_Proteins</option>
     <option value="world" selected>world</option>
+    <option value="sakila">movie</option> 
   </select>
   <br>
   
